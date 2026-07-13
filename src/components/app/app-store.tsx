@@ -37,7 +37,7 @@ const DEFAULT_FILTERS: Filters = {
   ageMin: 22,
   ageMax: 38,
   maxDistanceKm: 25,
-  lookingFor: ["female", "male", "nonbinary"],
+  lookingFor: ["female", "male"],
   onlyVerified: false,
 };
 

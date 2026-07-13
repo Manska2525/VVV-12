@@ -9,7 +9,6 @@ import type { Profile } from "@/lib/types";
 const GENDERS: { value: Profile["gender"]; label: string }[] = [
   { value: "female", label: "Девушки" },
   { value: "male", label: "Парни" },
-  { value: "nonbinary", label: "Иное" },
 ];
 
 
@@ -79,7 +78,7 @@ export function FiltersSheet() {
                 ageMin: 22,
                 ageMax: 38,
                 maxDistanceKm: 25,
-                lookingFor: ["female", "male", "nonbinary"],
+                lookingFor: ["female", "male"],
                 onlyVerified: false,
               })
             }
