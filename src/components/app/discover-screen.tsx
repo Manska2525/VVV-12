@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useApp } from "./app-store";
 import { SwipeCard } from "./swipe-card";
-import { hapticImpact, hapticNotification } from "@/lib/telegram";
+import { hapticImpact } from "@/lib/telegram";
 
 export function DiscoverScreen() {
   const { deck, swipe, rewind, setFiltersOpen, swipes } = useApp();
@@ -51,14 +51,11 @@ export function DiscoverScreen() {
               .slice(0)
               .reverse()
               .map((profile, idx) => {
-                const isTop = idx === visible.length - 1;
                 const stackIndex = visible.length - 1 - idx;
                 return (
                   <SwipeCard
                     key={profile.id}
                     profile={profile}
-                    onSwipe={(d) => handleSwipe(profile.id, d)}
-                    isTop={isTop}
                     stackIndex={stackIndex}
                   />
                 );
@@ -82,7 +79,7 @@ export function DiscoverScreen() {
             hapticImpact("light");
           }}
           variant="star"
-          ariaLabel="Отменить свайп"
+          ariaLabel="Отменить действие"
           disabled={!canRewind}
         >
           <RotateCcw className="h-5 w-5" />

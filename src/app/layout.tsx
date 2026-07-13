@@ -9,7 +9,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Spark — знакомства в Telegram",
   description:
-    "Spark — мини-приложение для знакомств внутри Telegram. Лента, матчи и чаты без лишнего шума.",
+    "Spark — мини-приложение для знакомств внутри Telegram. Лента, лайки и чаты без лишнего шума.",
 };
 
 export const viewport: Viewport = {

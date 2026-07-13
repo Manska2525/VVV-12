@@ -31,7 +31,7 @@ export function MatchesScreen() {
   return (
     <div className="flex h-full flex-col">
       <header className="px-5 pb-2 pt-4">
-        <h1 className="text-2xl font-bold tracking-tight">Матчи</h1>
+        <h1 className="text-2xl font-bold tracking-tight">Лайки</h1>
         <p className="text-xs text-muted-foreground">
           Здесь начинаются разговоры
         </p>
@@ -183,7 +183,7 @@ function MatchesList({
                     {isFromMe && last && (
                       <span className="text-muted-foreground">Вы: </span>
                     )}
-                    {last?.text ?? "Новый матч — напиши первым 👋"}
+                    {last?.text ?? "Новый взаимный лайк — напиши первым 👋"}
                   </p>
                   {match.unread > 0 && (
                     <span className="flex h-[18px] min-w-[18px] shrink-0 items-center justify-center rounded-full bg-primary px-1.5 text-[10px] font-bold text-primary-foreground">
@@ -266,9 +266,9 @@ function EmptyState() {
       <div className="mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-primary/10">
         <Heart className="h-10 w-10 text-primary" />
       </div>
-      <h2 className="mb-2 text-lg font-semibold">Матчей пока нет</h2>
+      <h2 className="mb-2 text-lg font-semibold">Лайков пока нет</h2>
       <p className="text-sm text-muted-foreground">
-        Свайпай в ленте — взаимные симпатии появятся здесь.
+        Свайпай в ленте — лайки появятся здесь.
       </p>
     </div>
   );

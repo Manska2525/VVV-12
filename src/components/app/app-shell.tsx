@@ -15,7 +15,7 @@ import { useTelegram } from "./telegram-provider";
 
 const NAV_ITEMS: { id: Screen; label: string; icon: typeof Compass }[] = [
   { id: "discover", label: "Лента", icon: Compass },
-  { id: "matches", label: "Матчи", icon: Heart },
+  { id: "matches", label: "Лайки", icon: Heart },
   { id: "profile", label: "Профиль", icon: User2 },
 ];
 
@@ -58,7 +58,7 @@ function NavBar({
           )}
         </button>
 
-        {/* Кнопка фильтров между Лента и Матчи */}
+        {/* Кнопка фильтров между Лента и Лайками */}
         <button
           type="button"
           aria-label="Фильтры"
@@ -69,7 +69,7 @@ function NavBar({
           <span>Фильтры</span>
         </button>
 
-        {/* Матчи */}
+        {/* Лайки */}
         <button
           type="button"
           role="tab"
@@ -91,7 +91,7 @@ function NavBar({
               </span>
             )}
           </span>
-          <span>Матчи</span>
+          <span>Лайки</span>
           {active === "matches" && (
             <span className="absolute -top-px left-1/2 h-[3px] w-8 -translate-x-1/2 rounded-full bg-primary" />
           )}

@@ -26,7 +26,7 @@ export function ProfileScreen() {
 
   const stats = [
     { label: "Лайков", value: Object.values(swipes).filter((s) => s.direction !== "pass").length, icon: Heart, color: "text-rose-500 bg-rose-500/10" },
-    { label: "Матчей", value: matchesSorted.length, icon: Sparkles, color: "text-amber-500 bg-amber-500/10" },
+    { label: "Лайки", value: matchesSorted.length, icon: Sparkles, color: "text-amber-500 bg-amber-500/10" },
     { label: "Просмотров", value: 142, icon: Eye, color: "text-sky-500 bg-sky-500/10" },
   ];
 
@@ -118,7 +118,7 @@ export function ProfileScreen() {
           <Item
             icon={User2}
             iconClass="text-violet-500 bg-violet-500/10"
-            title="Редактировать профиль"
+            title="Редактировать анкету"
             subtitle="Фото, био"
             onClick={() => setEditProfileOpen(true)}
           />

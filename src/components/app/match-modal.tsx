@@ -45,7 +45,7 @@ export function MatchModal() {
       aria-modal="true"
       aria-labelledby="match-title"
       className={cn(
-        "fixed inset-0 z-50 flex items-center justify-center px-6 transition-opacity duration-200",
+        "fixed inset-0 z-[9999] flex items-center justify-center px-6 transition-opacity duration-200",
         visible ? "opacity-100" : "opacity-0 pointer-events-none"
       )}
     >
@@ -93,7 +93,7 @@ export function MatchModal() {
         <div className="mb-1 flex items-center gap-1.5 text-primary">
           <Sparkles className="h-4 w-4" />
           <span className="text-xs font-bold uppercase tracking-widest">
-            Это матч!
+            Это взаимный лайк!
           </span>
           <Sparkles className="h-4 w-4" />
         </div>

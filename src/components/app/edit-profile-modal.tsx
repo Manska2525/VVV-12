@@ -59,7 +59,7 @@ export function EditProfileModal({ open, onOpenChange }: EditProfileModalProps) 
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="h-[90vh] max-h-[90vh] max-w-md overflow-y-auto rounded-3xl">
         <DialogHeader>
-          <DialogTitle>Редактировать профиль</DialogTitle>
+          <DialogTitle>Редактировать анкету</DialogTitle>
         </DialogHeader>
 
         {/* Анкета как будет выглядеть в поиске */}
