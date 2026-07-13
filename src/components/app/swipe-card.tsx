@@ -173,6 +173,8 @@ export function SwipeCard({ profile, stackIndex }: SwipeCardProps) {
           </>
         )}
 
+        {/* photo action buttons removed per request */}
+
         <div className="absolute inset-x-0 bottom-0 z-20 p-5 text-white">
           <div className="mb-1 flex items-end gap-2">
             <h2 className="text-3xl font-bold leading-none tracking-tight">
