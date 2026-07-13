@@ -17,6 +17,7 @@ import {
   User2,
 } from "lucide-react";
 import { useTelegram } from "./telegram-provider";
+import { useState, useRef } from "react";
 import { useApp } from "./app-store";
 import { cn } from "@/lib/utils";
 
@@ -47,7 +48,9 @@ export function ProfileScreen() {
           <div className="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-white/10 blur-xl" />
           <div className="relative flex items-center gap-4">
             <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full ring-4 ring-white/30">
-              {user?.photo_url ? (
+              {user?.photos?.length ? (
+                <ProfileAvatarSmall photos={user.photos} alt={name} />
+              ) : user?.photo_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={user.photo_url}
@@ -162,6 +165,41 @@ export function ProfileScreen() {
           Spark v1.0 · сделано с любовью к Telegram
         </p>
       </div>
+    </div>
+  );
+}
+
+function ProfileAvatarSmall({ photos, alt }: { photos: any[]; alt?: string }) {
+  const [idx, setIdx] = useState(0);
+  const touchStartRef = useRef<number | null>(null);
+  const touchEndRef = useRef<number | null>(null);
+
+  const prev = () => setIdx((p) => (photos?.length ? (p - 1 + photos.length) % photos.length : 0));
+  const next = () => setIdx((p) => (photos?.length ? (p + 1) % photos.length : 0));
+
+  return (
+    <div
+      className="h-full w-full"
+      onTouchStart={(e) => (touchStartRef.current = e.touches[0].clientX)}
+      onTouchMove={(e) => (touchEndRef.current = e.touches[0].clientX)}
+      onTouchEnd={() => {
+        if (touchStartRef.current == null || touchEndRef.current == null) return;
+        const d = touchEndRef.current - touchStartRef.current;
+        if (d > 40) prev();
+        else if (d < -40) next();
+        touchStartRef.current = null;
+        touchEndRef.current = null;
+      }}
+    >
+      {photos.map((p, i) => (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          key={p.id || i}
+          src={p.url || p}
+          alt={alt}
+          className={cn("absolute inset-0 h-full w-full object-cover transition-opacity duration-200", i === idx ? "opacity-100" : "opacity-0")}
+        />
+      ))}
     </div>
   );
 }
