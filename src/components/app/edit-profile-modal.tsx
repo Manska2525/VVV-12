@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -35,6 +35,8 @@ export function EditProfileModal({ open, onOpenChange }: EditProfileModalProps) 
   const initialPhotos = (user as any)?.photos?.map((p: any) => p.url) ?? (user?.photo_url ? [user.photo_url] : []);
   const [photos, setPhotos] = useState<string[]>(initialPhotos);
   const [photoIndex, setPhotoIndex] = useState(0);
+  const touchStartRef = useRef<number | null>(null);
+  const touchEndRef = useRef<number | null>(null);
 
   const handlePhotoClick = () => {
     fileInputRef.current?.click();
@@ -74,6 +76,43 @@ export function EditProfileModal({ open, onOpenChange }: EditProfileModalProps) 
     setPhotoIndex((prev) => Math.max(0, prev - 1));
   };
 
+  const prevPhoto = () => setPhotoIndex((p) => Math.max(0, p - 1));
+  const nextPhoto = () => setPhotoIndex((p) => Math.min(photos.length - 1, p + 1));
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartRef.current = e.touches[0].clientX;
+    touchEndRef.current = null;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndRef.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartRef.current == null || touchEndRef.current == null) return;
+    const delta = touchEndRef.current - touchStartRef.current;
+    const threshold = 50;
+    if (delta > threshold) {
+      // swipe right -> prev
+      prevPhoto();
+    } else if (delta < -threshold) {
+      // swipe left -> next
+      nextPhoto();
+    }
+    touchStartRef.current = null;
+    touchEndRef.current = null;
+  };
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!open) return;
+      if (e.key === "ArrowLeft") prevPhoto();
+      if (e.key === "ArrowRight") nextPhoto();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, photos.length]);
+
   const handleSave = () => {
     console.log({ name, bio, age, city, photos });
     onOpenChange(false);
@@ -91,20 +130,23 @@ export function EditProfileModal({ open, onOpenChange }: EditProfileModalProps) 
           <p className="mb-3 text-xs font-semibold text-muted-foreground">Предпросмотр Анкеты</p>
           <div className="relative h-96 overflow-hidden rounded-3xl bg-card shadow-xl ring-1 ring-black/5">
             {/* Photo */}
-            {photos.length > 0 ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={photos[photoIndex]}
-                alt={`${name} ${photoIndex + 1}`}
-                className="absolute inset-0 h-full w-full object-cover"
-              />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-black/5 to-black/10">
-                <div className="rounded-2xl h-56 w-80 flex items-center justify-center">
-                  <ImageIcon className="h-14 w-14 text-white/40" />
+              {photos.length > 0 ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={photos[photoIndex]}
+                  alt={`${name} ${photoIndex + 1}`}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  onTouchStart={handleTouchStart}
+                  onTouchMove={handleTouchMove}
+                  onTouchEnd={handleTouchEnd}
+                />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-black/5 to-black/10">
+                  <div className="rounded-2xl h-56 w-80 flex items-center justify-center">
+                    <ImageIcon className="h-14 w-14 text-white/40" />
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
             {/* Photo indicators */}
             <div className="absolute inset-x-0 top-0 z-10 flex gap-2 p-3">
@@ -124,6 +166,26 @@ export function EditProfileModal({ open, onOpenChange }: EditProfileModalProps) 
                 <div className="h-1 flex-1 rounded-full bg-white" />
               )}
             </div>
+
+            {/* Prev / Next buttons */}
+            {photos.length > 1 && (
+              <>
+                <button
+                  onClick={prevPhoto}
+                  className="absolute left-3 top-1/2 z-30 -translate-y-1/2 rounded-full bg-black/40 p-2 text-white"
+                  aria-label="Previous photo"
+                >
+                  ‹
+                </button>
+                <button
+                  onClick={nextPhoto}
+                  className="absolute right-3 top-1/2 z-30 -translate-y-1/2 rounded-full bg-black/40 p-2 text-white"
+                  aria-label="Next photo"
+                >
+                  ›
+                </button>
+              </>
+            )}
 
             {/* Gradient overlay */}
             <div className="absolute inset-x-0 bottom-0 z-10 h-2/3 bg-gradient-to-t from-black/95 via-black/55 to-transparent" />
