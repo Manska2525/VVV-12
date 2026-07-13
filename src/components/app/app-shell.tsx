@@ -92,6 +92,41 @@ function ShellInner() {
     }
   }, [webApp, activeChatId, openChat]);
 
+  // Client-side safeguard: remove any leftover interest "chips" that may be
+  // present in prerendered/cached HTML across the app. Matches common tag
+  // texts (e.g. "Путешествия", "Йога") and removes their nodes after mount.
+  useEffect(() => {
+    const INTEREST_KEYS = [
+      "Путешествия",
+      "Спорт",
+      "Музыка",
+      "Кино",
+      "Книги",
+      "Готовка",
+      "Йога",
+      "Фотография",
+      "Танцы",
+      "Игры",
+      "Природа",
+      "Искусство",
+      "Технологии",
+      "Настолки",
+    ];
+
+    const removeChips = () => {
+      const els = Array.from(document.querySelectorAll('button,span')) as HTMLElement[];
+      els.forEach((el) => {
+        const t = (el.textContent || '').trim();
+        if (INTEREST_KEYS.includes(t)) el.remove();
+      });
+    };
+
+    // Run once after mount and a short delay to allow hydration-produced nodes.
+    removeChips();
+    const timer = window.setTimeout(removeChips, 500);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   return (
     <div className="relative mx-auto flex min-h-screen w-full max-w-md flex-col bg-background">
       <main className="relative flex-1 overflow-hidden">
