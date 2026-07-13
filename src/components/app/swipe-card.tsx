@@ -185,7 +185,7 @@ export function SwipeCard({ profile, stackIndex, onLike, onSuper, onNextProfile,
         )}
 
         {/* Vertical action buttons (like, super) on right of photo, aligned near profile city */}
-        <div className="absolute right-4 bottom-[5.5rem] z-30 flex flex-col items-center gap-3">
+        <div className="absolute right-4 bottom-[5.5rem] z-30 flex items-center gap-3">
           <div className="relative">
             <span className="absolute -inset-2 rounded-full blur-3xl opacity-70 bg-pink-500/40 -z-10" />
             <button
