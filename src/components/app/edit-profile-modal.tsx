@@ -214,7 +214,7 @@ export function EditProfileModal({ open, onOpenChange }: EditProfileModalProps) 
             )}
 
             {/* Gradient overlay */}
-            <div className="absolute inset-x-0 bottom-0 z-10 h-2/3 bg-gradient-to-t from-black/95 via-black/55 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 z-10 h-1/2 bg-gradient-to-t from-black/95 via-black/55 to-transparent" />
 
             {/* Profile info */}
             <div className="absolute inset-x-0 bottom-0 z-20 p-5 text-white">
