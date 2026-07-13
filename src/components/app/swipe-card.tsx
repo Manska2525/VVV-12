@@ -177,27 +177,33 @@ export function SwipeCard({ profile, stackIndex, onLike, onSuper }: SwipeCardPro
 
         {/* Vertical action buttons (like, super) on right of photo, aligned near profile city */}
         <div className="absolute right-4 bottom-[5.5rem] z-30 flex flex-col items-center gap-3">
-          <button
-            type="button"
-            onClick={(e) => { e.stopPropagation(); onLike?.(profile.id); }}
-            aria-label="Нравится"
-            className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary to-pink-500 text-primary-foreground shadow-lg shadow-primary/40"
-          >
-            <svg className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 3.99 4 6.5 4c1.74 0 3.41.81 4.5 2.09C12.09 4.81 13.76 4 15.5 4 18.01 4 20 6 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-            </svg>
-          </button>
+          <div className="relative">
+            <span className="absolute -inset-2 rounded-full blur-3xl opacity-70 bg-pink-500/40 -z-10" />
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); onLike?.(profile.id); }}
+              aria-label="Нравится"
+              className="z-20 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-primary to-pink-500 text-primary-foreground shadow-lg shadow-primary/40"
+            >
+              <svg className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 3.99 4 6.5 4c1.74 0 3.41.81 4.5 2.09C12.09 4.81 13.76 4 15.5 4 18.01 4 20 6 20 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+              </svg>
+            </button>
+          </div>
 
-          <button
-            type="button"
-            onClick={(e) => { e.stopPropagation(); onSuper?.(profile.id); }}
-            aria-label="Супер-лайк"
-            className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-sky-400 to-blue-600 text-white shadow-lg shadow-blue-500/40"
-          >
-            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-            </svg>
-          </button>
+          <div className="relative">
+            <span className="absolute -inset-2 rounded-full blur-3xl opacity-70 bg-sky-400/30 -z-10" />
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); onSuper?.(profile.id); }}
+              aria-label="Супер-лайк"
+              className="z-20 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-sky-400 to-blue-600 text-white shadow-lg shadow-blue-500/40"
+            >
+              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <div className="absolute inset-x-0 bottom-0 z-20 p-5 text-white">
