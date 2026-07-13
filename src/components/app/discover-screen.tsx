@@ -55,8 +55,6 @@ export function DiscoverScreen() {
                     key={profile.id}
                     profile={profile}
                     stackIndex={stackIndex}
-                    onLike={(id) => handleSwipe(id, "like")}
-                    onSuper={(id) => handleSwipe(id, "super")}
                   />
                 );
               })}
@@ -84,7 +82,22 @@ export function DiscoverScreen() {
         >
           <RotateCcw className="h-5 w-5" />
         </ActionButton>
-        {/* like/super moved to card as vertical buttons */}
+        <ActionButton
+          onClick={() => handleAction("like")}
+          variant="primary"
+          ariaLabel="Нравится"
+          disabled={deck.length === 0}
+        >
+          <Heart className="h-7 w-7" fill="currentColor" />
+        </ActionButton>
+        <ActionButton
+          onClick={() => handleAction("super")}
+          variant="super"
+          ariaLabel="Супер-лайк"
+          disabled={deck.length === 0}
+        >
+          <Star className="h-6 w-6" fill="currentColor" />
+        </ActionButton>
       </div>
     </div>
   );
