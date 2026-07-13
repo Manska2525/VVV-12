@@ -28,6 +28,25 @@ export function SwipeCard({ profile, onSwipe, isTop, stackIndex }: SwipeCardProp
     setPhotoIndex(0);
   }, [profile.id]);
 
+  // Remove any prerendered interest "chips" that may be present in cached HTML.
+  // This is a client-side safeguard: if the server-served HTML still contains
+  // interest buttons (due to stale SSG), remove them after mount so the UI
+  // doesn't show interests in the feed.
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    // Find the profile info container and remove buttons that look like chips.
+    const info = el.querySelector('.absolute.inset-x-0.bottom-0');
+    if (!info) return;
+    const buttons = Array.from(info.querySelectorAll('button')) as HTMLElement[];
+    buttons.forEach((b) => {
+      const cls = b.className || '';
+      if (cls.includes('rounded-full') && cls.includes('px-3')) {
+        b.remove();
+      }
+    });
+  }, [profile.id]);
+
   const handlePointerDown = (e: React.PointerEvent) => {
     if (!isTop) return;
     startRef.current = { x: e.clientX, y: e.clientY, t: Date.now() };
