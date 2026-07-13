@@ -43,7 +43,7 @@ export function FiltersSheet() {
       aria-modal="true"
       aria-labelledby="filters-title"
       className={cn(
-        "fixed inset-0 z-50 transition-opacity duration-200",
+        "fixed inset-0 z-[9999] transition-opacity duration-200",
         filtersOpen ? "opacity-100" : "pointer-events-none opacity-0"
       )}
     >
@@ -56,7 +56,7 @@ export function FiltersSheet() {
 
       <div
         className={cn(
-          "absolute inset-x-0 bottom-0 mx-auto flex max-h-[88%] w-full max-w-md flex-col rounded-t-3xl bg-card shadow-2xl transition-transform duration-300 ease-out safe-bottom",
+          "absolute inset-x-0 bottom-0 mx-auto flex max-h-[88%] w-full max-w-md flex-col rounded-t-3xl bg-card shadow-2xl transition-transform duration-300 ease-out safe-bottom z-[10000]",
           filtersOpen ? "translate-y-0" : "translate-y-full"
         )}
       >
