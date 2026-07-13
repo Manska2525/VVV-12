@@ -136,3 +136,5 @@ dist
 
 pages/_studio/
 .download/
+# Prevent accidentally re-adding archived workspace copy
+gigastudio-d61998ff/
