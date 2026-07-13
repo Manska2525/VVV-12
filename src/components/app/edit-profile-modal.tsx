@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { BadgeCheck, MapPin, Upload } from "lucide-react";
+import { BadgeCheck, MapPin, Upload, Image as ImageIcon } from "lucide-react";
 import { useTelegram } from "./telegram-provider";
 
 interface EditProfileModalProps {
@@ -67,13 +67,19 @@ export function EditProfileModal({ open, onOpenChange }: EditProfileModalProps) 
           <p className="mb-3 text-xs font-semibold text-muted-foreground">Предпросмотр Анкеты</p>
           <div className="relative h-96 overflow-hidden rounded-3xl bg-card shadow-xl ring-1 ring-black/5">
             {/* Photo */}
-            {photoUrl && (
+            {photoUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={photoUrl}
                 alt={name}
                 className="absolute inset-0 h-full w-full object-cover"
               />
+            ) : (
+              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-black/5 to-black/10">
+                <div className="rounded-2xl h-56 w-80 flex items-center justify-center">
+                  <ImageIcon className="h-14 w-14 text-white/40" />
+                </div>
+              </div>
             )}
 
             {/* Photo indicators */}
