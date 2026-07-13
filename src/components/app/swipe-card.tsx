@@ -1,6 +1,6 @@
 "use client";
 
-import { BadgeCheck, MapPin, Sparkles, Star } from "lucide-react";
+import { BadgeCheck, MapPin } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import type { Profile, SwipeDirection } from "@/lib/types";
@@ -195,41 +195,14 @@ export function SwipeCard({ profile, onSwipe, isTop, stackIndex }: SwipeCardProp
             )}
           </div>
           <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-white/80">
-            <span className="inline-flex items-center gap-1">
-              <MapPin className="h-3.5 w-3.5" />
-              {profile.city} · {profile.distanceKm} км
-            </span>
-            {profile.height && (
               <span className="inline-flex items-center gap-1">
-                <Sparkles className="h-3.5 w-3.5" />
-                {profile.height} см
+                <MapPin className="h-3.5 w-3.5" />
+                {profile.city} · {profile.distanceKm} км
               </span>
-            )}
-            {profile.occupation && (
-              <span className="inline-flex items-center gap-1">
-                <Star className="h-3.5 w-3.5" />
-                {profile.occupation}
-              </span>
-            )}
-          </div>
-          <p className="line-clamp-3 text-sm leading-snug text-white/85">
-            {profile.bio}
-          </p>
-          <div className="mt-3 flex flex-wrap gap-1.5">
-            {profile.interests.slice(0, 4).map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur"
-              >
-                {tag}
-              </span>
-            ))}
-            {profile.interests.length > 4 && (
-              <span className="rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-medium text-white/70 backdrop-blur">
-                +{profile.interests.length - 4}
-              </span>
-            )}
-          </div>
+            </div>
+            <div className="max-h-[4.5rem] overflow-y-auto text-sm leading-snug text-white/85 pr-2">
+              {profile.bio}
+            </div>
         </div>
       </div>
     </div>
