@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { BadgeCheck, MapPin, Upload, Image as ImageIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { useTelegram } from "./telegram-provider";
 
 interface EditProfileModalProps {
@@ -57,7 +58,7 @@ export function EditProfileModal({ open, onOpenChange }: EditProfileModalProps) 
   };
 
   const handleSave = () => {
-    console.log({ name, bio, age, city, photoUrl });
+    console.log({ name, bio, age, city, photos });
     onOpenChange(false);
   };
 
@@ -145,6 +146,7 @@ export function EditProfileModal({ open, onOpenChange }: EditProfileModalProps) 
             ref={fileInputRef}
             type="file"
             accept="image/*"
+            multiple
             onChange={handleFileChange}
             className="hidden"
           />
