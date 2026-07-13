@@ -13,7 +13,6 @@ export interface Profile {
   gender: Gender;
   bio: string;
   photos: Photo[];
-  interests: string[];
   occupation: string;
   city: string;
   distanceKm: number;

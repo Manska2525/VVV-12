@@ -12,22 +12,6 @@ const GENDERS: { value: Profile["gender"]; label: string }[] = [
   { value: "nonbinary", label: "Иное" },
 ];
 
-const INTERESTS = [
-  "Путешествия",
-  "Спорт",
-  "Музыка",
-  "Кино",
-  "Книги",
-  "Готовка",
-  "Йога",
-  "Фотография",
-  "Танцы",
-  "Игры",
-  "Природа",
-  "Искусство",
-  "Технологии",
-  "Настолки",
-];
 
 export function FiltersSheet() {
   const { filters, filtersOpen, setFiltersOpen, setFilters } = useApp();
@@ -168,31 +152,7 @@ export function FiltersSheet() {
             />
           </section>
 
-          <section className="mb-6">
-            <h3 className="mb-3 text-sm font-semibold">Интересы</h3>
-            <div className="flex flex-wrap gap-2">
-              {INTERESTS.map((tag) => {
-                const active = draft.lookingFor.length > 0; // placeholder
-                return (
-                  <button
-                    key={tag}
-                    type="button"
-                    className={cn(
-                      "rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
-                      active
-                        ? "border-primary/40 bg-primary/10 text-primary"
-                        : "border-border bg-background text-foreground hover:border-primary/40"
-                    )}
-                  >
-                    {tag}
-                  </button>
-                );
-              })}
-            </div>
-            <p className="mt-2 text-[11px] text-muted-foreground">
-              Демо-режим: интересы не влияют на ленту.
-            </p>
-          </section>
+          {/* Интересы удалены */}
 
           <section className="mb-2">
             <button

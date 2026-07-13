@@ -95,7 +95,7 @@ export function ProfileScreen() {
             icon={SlidersHorizontal}
             iconClass="text-primary bg-primary/10"
             title="Фильтры"
-            subtitle="Возраст, расстояние, интересы"
+            subtitle="Возраст, расстояние"
             onClick={() => setFiltersOpen(true)}
           />
           <Item
@@ -119,7 +119,7 @@ export function ProfileScreen() {
             icon={User2}
             iconClass="text-violet-500 bg-violet-500/10"
             title="Редактировать профиль"
-            subtitle="Фото, био, интересы"
+            subtitle="Фото, био"
             onClick={() => setEditProfileOpen(true)}
           />
           <Item
