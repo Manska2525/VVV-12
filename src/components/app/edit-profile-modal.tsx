@@ -153,8 +153,8 @@ export function EditProfileModal({ open, onOpenChange }: EditProfileModalProps) 
                       className={cn(
                         "absolute inset-0 h-full w-full object-cover transition-all duration-300 ease-out",
                         i === photoIndex
-                          ? "opacity-100 translate-x-0 z-20"
-                          : "opacity-0 translate-x-4 z-10"
+                          ? "opacity-100 translate-x-0 z-0"
+                          : "opacity-0 translate-x-4 z-0"
                       )}
                     />
                   ))}
