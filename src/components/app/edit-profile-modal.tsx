@@ -137,20 +137,40 @@ export function EditProfileModal({ open, onOpenChange }: EditProfileModalProps) 
           <div className="relative h-96 overflow-hidden rounded-3xl bg-card shadow-xl ring-1 ring-black/5">
             {/* Photo */}
               {photos.length > 0 ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={photos[photoIndex]}
-                  alt={`${name} ${photoIndex + 1}`}
-                  className="absolute inset-0 h-full w-full object-cover"
+                // render layered images to animate transitions
+                <div
+                  className="absolute inset-0 h-full w-full overflow-hidden"
                   onTouchStart={handleTouchStart}
                   onTouchMove={handleTouchMove}
                   onTouchEnd={handleTouchEnd}
-                />
+                >
+                  {photos.map((p, i) => (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      key={i}
+                      src={p}
+                      alt={`${name} ${i + 1}`}
+                      className={cn(
+                        "absolute inset-0 h-full w-full object-cover transition-all duration-300 ease-out",
+                        i === photoIndex
+                          ? "opacity-100 translate-x-0 z-20"
+                          : "opacity-0 translate-x-4 z-10"
+                      )}
+                    />
+                  ))}
+                </div>
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-black/5 to-black/10">
                   <div className="rounded-2xl h-56 w-80 flex items-center justify-center">
                     <ImageIcon className="h-14 w-14 text-white/40" />
                   </div>
+                </div>
+              )}
+
+              {/* Counter e.g. 2/3 */}
+              {photos.length > 0 && (
+                <div className="absolute right-3 top-3 z-30 rounded-full bg-black/50 px-3 py-1 text-sm text-white">
+                  {photoIndex + 1}/{photos.length}
                 </div>
               )}
 
