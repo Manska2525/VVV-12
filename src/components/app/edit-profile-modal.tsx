@@ -76,8 +76,14 @@ export function EditProfileModal({ open, onOpenChange }: EditProfileModalProps) 
     setPhotoIndex((prev) => Math.max(0, prev - 1));
   };
 
-  const prevPhoto = () => setPhotoIndex((p) => Math.max(0, p - 1));
-  const nextPhoto = () => setPhotoIndex((p) => Math.min(photos.length - 1, p + 1));
+  const prevPhoto = () => setPhotoIndex((p) => {
+    if (photos.length === 0) return 0;
+    return (p - 1 + photos.length) % photos.length;
+  });
+  const nextPhoto = () => setPhotoIndex((p) => {
+    if (photos.length === 0) return 0;
+    return (p + 1) % photos.length;
+  });
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartRef.current = e.touches[0].clientX;
