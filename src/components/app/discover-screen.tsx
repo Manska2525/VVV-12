@@ -1,7 +1,7 @@
 "use client";
 
 import { Filter, RotateCcw, Sparkles, X, Heart, Star } from "lucide-react";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { useApp } from "./app-store";
 import { SwipeCard } from "./swipe-card";
@@ -39,6 +39,50 @@ export function DiscoverScreen() {
     if (navOffset - 1 >= 0) setNavOffset((s) => s - 1);
   };
 
+  // touch handlers for full-screen vertical swipe navigation
+  const touchStartYRef = useRef<number | null>(null);
+  const touchEndYRef = useRef<number | null>(null);
+  const touchStartXRef = useRef<number | null>(null);
+  const touchEndXRef = useRef<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartYRef.current = e.touches[0].clientY;
+    touchStartXRef.current = e.touches[0].clientX;
+    touchEndYRef.current = null;
+    touchEndXRef.current = null;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndYRef.current = e.touches[0].clientY;
+    touchEndXRef.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    const startY = touchStartYRef.current;
+    const endY = touchEndYRef.current;
+    const startX = touchStartXRef.current;
+    const endX = touchEndXRef.current;
+    const threshold = 50;
+    if (startY == null || endY == null || startX == null || endX == null) {
+      touchStartYRef.current = null;
+      touchStartXRef.current = null;
+      return;
+    }
+
+    const deltaY = endY - startY;
+    const deltaX = endX - startX;
+
+    if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > threshold) {
+      if (deltaY < 0) goNextProfile();
+      else goPrevProfile();
+    }
+
+    touchStartYRef.current = null;
+    touchEndYRef.current = null;
+    touchStartXRef.current = null;
+    touchEndXRef.current = null;
+  };
+
   return (
     <div className="flex h-full flex-col">
       <header className="px-5 py-2">
@@ -55,7 +99,7 @@ export function DiscoverScreen() {
         {deck.length === 0 ? (
           <EmptyDeck />
         ) : (
-          <div className="relative h-full w-full">
+          <div className="relative h-full w-full" onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd}>
             {visible
               .slice(0)
               .reverse()

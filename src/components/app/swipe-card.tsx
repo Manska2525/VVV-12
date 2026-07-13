@@ -18,8 +18,6 @@ export function SwipeCard({ profile, stackIndex, onLike, onSuper, onNextProfile,
   const [photoIndex, setPhotoIndex] = useState(0);
   const touchStartXRef = useRef<number | null>(null);
   const touchEndXRef = useRef<number | null>(null);
-  const touchStartYRef = useRef<number | null>(null);
-  const touchEndYRef = useRef<number | null>(null);
 
   useEffect(() => {
     setPhotoIndex(0);
@@ -36,48 +34,31 @@ export function SwipeCard({ profile, stackIndex, onLike, onSuper, onNextProfile,
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartXRef.current = e.touches[0].clientX;
-    touchStartYRef.current = e.touches[0].clientY;
     touchEndXRef.current = null;
-    touchEndYRef.current = null;
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
     touchEndXRef.current = e.touches[0].clientX;
-    touchEndYRef.current = e.touches[0].clientY;
   };
 
   const handleTouchEnd = () => {
     const startX = touchStartXRef.current;
     const endX = touchEndXRef.current;
-    const startY = touchStartYRef.current;
-    const endY = touchEndYRef.current;
     const threshold = 50;
-    if (startX == null || startY == null || endX == null || endY == null) {
+    if (startX == null || endX == null) {
       touchStartXRef.current = null;
-      touchStartYRef.current = null;
       return;
     }
 
     const deltaX = endX - startX;
-    const deltaY = endY - startY;
 
-    // If vertical gesture is dominant, navigate profiles (no personal actions).
-    if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > threshold) {
-      if (deltaY < 0) {
-        onNextProfile?.();
-      } else {
-        onPrevProfile?.();
-      }
-    } else if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > threshold) {
-      // Horizontal gesture — photo navigation
+    if (Math.abs(deltaX) > threshold) {
       if (deltaX > 0) prevPhoto();
       else nextPhoto();
     }
 
     touchStartXRef.current = null;
     touchEndXRef.current = null;
-    touchStartYRef.current = null;
-    touchEndYRef.current = null;
   };
 
   // Remove any prerendered interest "chips" that may be present in cached HTML.
