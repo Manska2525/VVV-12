@@ -83,6 +83,30 @@ export function DiscoverScreen() {
     touchEndXRef.current = null;
   };
 
+  // Also listen on window so swipes over fixed nav or other overlays are detected.
+  useEffect(() => {
+    const onStart = (e: TouchEvent) => {
+      touchStartYRef.current = e.touches[0]?.clientY ?? null;
+      touchStartXRef.current = e.touches[0]?.clientX ?? null;
+      touchEndYRef.current = null;
+      touchEndXRef.current = null;
+    };
+    const onMove = (e: TouchEvent) => {
+      touchEndYRef.current = e.touches[0]?.clientY ?? null;
+      touchEndXRef.current = e.touches[0]?.clientX ?? null;
+    };
+    const onEnd = () => handleTouchEnd();
+
+    window.addEventListener("touchstart", onStart, { passive: true });
+    window.addEventListener("touchmove", onMove, { passive: true });
+    window.addEventListener("touchend", onEnd);
+    return () => {
+      window.removeEventListener("touchstart", onStart);
+      window.removeEventListener("touchmove", onMove);
+      window.removeEventListener("touchend", onEnd);
+    };
+  }, [navOffset, deck.length]);
+
   return (
     <div className="flex h-full flex-col">
       <header className="px-5 py-2">
