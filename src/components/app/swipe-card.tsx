@@ -10,12 +10,16 @@ interface SwipeCardProps {
   stackIndex: number;
   onLike?: (id: string) => void;
   onSuper?: (id: string) => void;
+  onNextProfile?: () => void;
+  onPrevProfile?: () => void;
 }
 
-export function SwipeCard({ profile, stackIndex, onLike, onSuper }: SwipeCardProps) {
+export function SwipeCard({ profile, stackIndex, onLike, onSuper, onNextProfile, onPrevProfile }: SwipeCardProps) {
   const [photoIndex, setPhotoIndex] = useState(0);
-  const touchStartRef = useRef<number | null>(null);
-  const touchEndRef = useRef<number | null>(null);
+  const touchStartXRef = useRef<number | null>(null);
+  const touchEndXRef = useRef<number | null>(null);
+  const touchStartYRef = useRef<number | null>(null);
+  const touchEndYRef = useRef<number | null>(null);
 
   useEffect(() => {
     setPhotoIndex(0);
@@ -31,25 +35,49 @@ export function SwipeCard({ profile, stackIndex, onLike, onSuper }: SwipeCardPro
   });
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartRef.current = e.touches[0].clientX;
-    touchEndRef.current = null;
+    touchStartXRef.current = e.touches[0].clientX;
+    touchStartYRef.current = e.touches[0].clientY;
+    touchEndXRef.current = null;
+    touchEndYRef.current = null;
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    touchEndRef.current = e.touches[0].clientX;
+    touchEndXRef.current = e.touches[0].clientX;
+    touchEndYRef.current = e.touches[0].clientY;
   };
 
   const handleTouchEnd = () => {
-    if (touchStartRef.current == null || touchEndRef.current == null) return;
-    const delta = touchEndRef.current - touchStartRef.current;
+    const startX = touchStartXRef.current;
+    const endX = touchEndXRef.current;
+    const startY = touchStartYRef.current;
+    const endY = touchEndYRef.current;
     const threshold = 50;
-    if (delta > threshold) {
-      prevPhoto();
-    } else if (delta < -threshold) {
-      nextPhoto();
+    if (startX == null || startY == null || endX == null || endY == null) {
+      touchStartXRef.current = null;
+      touchStartYRef.current = null;
+      return;
     }
-    touchStartRef.current = null;
-    touchEndRef.current = null;
+
+    const deltaX = endX - startX;
+    const deltaY = endY - startY;
+
+    // If vertical gesture is dominant, navigate profiles (no personal actions).
+    if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > threshold) {
+      if (deltaY < 0) {
+        onNextProfile?.();
+      } else {
+        onPrevProfile?.();
+      }
+    } else if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > threshold) {
+      // Horizontal gesture — photo navigation
+      if (deltaX > 0) prevPhoto();
+      else nextPhoto();
+    }
+
+    touchStartXRef.current = null;
+    touchEndXRef.current = null;
+    touchStartYRef.current = null;
+    touchEndYRef.current = null;
   };
 
   // Remove any prerendered interest "chips" that may be present in cached HTML.
@@ -99,7 +127,7 @@ export function SwipeCard({ profile, stackIndex, onLike, onSuper }: SwipeCardPro
   return (
     <div
       id={`profile-card-${profile.id}`}
-      className="absolute inset-0 select-none touch-none"
+      className="absolute inset-0 select-none"
       style={style}
     >
       <div className="relative h-full w-full overflow-hidden rounded-3xl bg-card shadow-xl ring-1 ring-black/5 dark:ring-white/5">
@@ -202,7 +230,7 @@ export function SwipeCard({ profile, stackIndex, onLike, onSuper }: SwipeCardPro
           </div>
         </div>
 
-        <div className="absolute inset-x-0 bottom-0 z-20 p-5 text-white">
+        <div className="absolute inset-x-0 bottom-6 z-20 p-5 text-white">
           <div className="mb-1 flex items-end gap-2">
             <h2 className="text-3xl font-bold leading-none tracking-tight">
               {profile.name}
