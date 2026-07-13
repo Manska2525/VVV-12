@@ -217,9 +217,9 @@ function DualRangeSlider({
 
   return (
     <div className="relative h-8">
-      <div className="absolute left-0 right-0 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-white" />
+      <div className="absolute left-0 right-0 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-primary" />
       <div
-        className="absolute top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-primary"
+        className="absolute top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-white"
         style={{ left: `${leftPct}%`, right: `${100 - rightPct}%` }}
       />
       <input
