@@ -31,23 +31,29 @@ export function EditProfileModal({ open, onOpenChange }: EditProfileModalProps) 
   );
   const [age, setAge] = useState("28");
   const [city, setCity] = useState("Москва");
-  const [photoUrl, setPhotoUrl] = useState(user?.photo_url || "");
+  const initialPhotos = (user as any)?.photos?.map((p: any) => p.url) ?? (user?.photo_url ? [user.photo_url] : []);
+  const [photos, setPhotos] = useState<string[]>(initialPhotos);
+  const [photoIndex, setPhotoIndex] = useState(0);
 
   const handlePhotoClick = () => {
     fileInputRef.current?.click();
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const result = event.target?.result as string;
-        setPhotoUrl(result);
-        console.log("Фото загружено:", file.name);
-      };
-      reader.readAsDataURL(file);
-    }
+    const files = Array.from(e.target.files || []).slice(0, 3);
+    if (files.length === 0) return;
+    const readers = files.map((file) => {
+      return new Promise<string>((res) => {
+        const reader = new FileReader();
+        reader.onload = (event) => res(event.target?.result as string);
+        reader.readAsDataURL(file);
+      });
+    });
+    Promise.all(readers).then((results) => {
+      setPhotos(results);
+      setPhotoIndex(0);
+      console.log("Фото загружены:", files.map((f) => f.name));
+    });
   };
 
   const handleSave = () => {
@@ -67,11 +73,11 @@ export function EditProfileModal({ open, onOpenChange }: EditProfileModalProps) 
           <p className="mb-3 text-xs font-semibold text-muted-foreground">Предпросмотр Анкеты</p>
           <div className="relative h-96 overflow-hidden rounded-3xl bg-card shadow-xl ring-1 ring-black/5">
             {/* Photo */}
-            {photoUrl ? (
+            {photos.length > 0 ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                src={photoUrl}
-                alt={name}
+                src={photos[photoIndex]}
+                alt={`${name} ${photoIndex + 1}`}
                 className="absolute inset-0 h-full w-full object-cover"
               />
             ) : (
@@ -83,8 +89,22 @@ export function EditProfileModal({ open, onOpenChange }: EditProfileModalProps) 
             )}
 
             {/* Photo indicators */}
-            <div className="absolute inset-x-0 top-0 z-10 flex gap-1.5 p-3">
-              <div className="h-1 flex-1 rounded-full bg-white" />
+            <div className="absolute inset-x-0 top-0 z-10 flex gap-2 p-3">
+              {photos.length > 0 ? (
+                photos.map((p, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setPhotoIndex(i)}
+                    className={cn(
+                      "h-1 w-8 rounded-full transition-all",
+                      i === photoIndex ? "bg-white w-12" : "bg-white/40"
+                    )}
+                    aria-label={`Photo ${i + 1}`}
+                  />
+                ))
+              ) : (
+                <div className="h-1 flex-1 rounded-full bg-white" />
+              )}
             </div>
 
             {/* Gradient overlay */}
