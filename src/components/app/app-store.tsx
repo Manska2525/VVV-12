@@ -52,6 +52,7 @@ interface AppState {
   activeChatId: string | null;
   matchModalProfileId: string | null;
   filtersOpen: boolean;
+  editProfileOpen: boolean;
 }
 
 type Action =
@@ -63,6 +64,7 @@ type Action =
   | { type: "markRead"; matchId: string }
   | { type: "setFilters"; filters: Partial<Filters> }
   | { type: "setFiltersOpen"; open: boolean }
+  | { type: "setEditProfileOpen"; open: boolean }
   | { type: "reset" };
 
 function reducer(state: AppState, action: Action): AppState {
@@ -159,6 +161,8 @@ function reducer(state: AppState, action: Action): AppState {
       return { ...state, filters: { ...state.filters, ...action.filters } };
     case "setFiltersOpen":
       return { ...state, filtersOpen: action.open };
+    case "setEditProfileOpen":
+      return { ...state, editProfileOpen: action.open };
     case "reset":
       return {
         profiles: initialProfiles,
@@ -189,6 +193,7 @@ interface AppContextValue extends AppState {
   markRead: (matchId: string) => void;
   setFilters: (filters: Partial<Filters>) => void;
   setFiltersOpen: (open: boolean) => void;
+  setEditProfileOpen: (open: boolean) => void;
   getProfile: (id: string) => Profile | undefined;
   getMatch: (id: string) => Match | undefined;
 }
@@ -213,6 +218,7 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }) {
     activeChatId: null,
     matchModalProfileId: null,
     filtersOpen: false,
+    editProfileOpen: false,
   }));
 
   const profileIndex = useRef<Map<string, Profile>>(new Map());
@@ -285,6 +291,10 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }) {
     (open: boolean) => dispatch({ type: "setFiltersOpen", open }),
     []
   );
+  const setEditProfileOpen = useCallback(
+    (open: boolean) => dispatch({ type: "setEditProfileOpen", open }),
+    []
+  );
 
   const getProfile = useCallback(
     (id: string) => profileIndex.current.get(id),
@@ -311,6 +321,7 @@ export function AppStoreProvider({ children }: { children: React.ReactNode }) {
       markRead,
       setFilters,
       setFiltersOpen,
+      setEditProfileOpen,
       getProfile,
       getMatch,
     }),

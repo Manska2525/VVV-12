@@ -10,6 +10,7 @@ import { ProfileScreen } from "./profile-screen";
 import { ChatScreen } from "./chat-screen";
 import { MatchModal } from "./match-modal";
 import { FiltersSheet } from "./filters-sheet";
+import { EditProfileModal } from "./edit-profile-modal";
 import { useTelegram } from "./telegram-provider";
 
 const NAV_ITEMS: { id: Screen; label: string; icon: typeof Compass }[] = [
@@ -75,7 +76,7 @@ function NavBar({
 
 function ShellInner() {
   const [active, setActive] = useState<Screen>("discover");
-  const { activeChatId, openChat } = useApp();
+  const { activeChatId, openChat, editProfileOpen, setEditProfileOpen } = useApp();
   const { webApp } = useTelegram();
 
   useEffect(() => {
@@ -113,6 +114,7 @@ function ShellInner() {
       <NavBar active={active} onChange={setActive} />
       <MatchModal />
       <FiltersSheet />
+      <EditProfileModal open={editProfileOpen} onOpenChange={setEditProfileOpen} />
     </div>
   );
 }

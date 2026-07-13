@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils";
 
 export function ProfileScreen() {
   const { user, isTelegram } = useTelegram();
-  const { matchesSorted, setFiltersOpen, swipes } = useApp();
+  const { matchesSorted, setFiltersOpen, swipes, setEditProfileOpen } = useApp();
 
   const stats = [
     { label: "Лайков", value: Object.values(swipes).filter((s) => s.direction !== "pass").length, icon: Heart, color: "text-rose-500 bg-rose-500/10" },
@@ -120,6 +120,7 @@ export function ProfileScreen() {
             iconClass="text-violet-500 bg-violet-500/10"
             title="Редактировать профиль"
             subtitle="Фото, био, интересы"
+            onClick={() => setEditProfileOpen(true)}
           />
           <Item
             icon={Shield}
