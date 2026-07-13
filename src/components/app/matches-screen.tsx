@@ -1,7 +1,7 @@
 "use client";
 
 import { BadgeCheck, Heart, MessageCircle, Search, Sparkles } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { useApp } from "./app-store";
 import { hapticImpact } from "@/lib/telegram";
@@ -143,17 +143,7 @@ function MatchesList({
               }}
               className="group flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left transition-colors hover:bg-secondary/70 active:scale-[0.99]"
             >
-              <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full ring-2 ring-primary/20">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={profile.photos[0].url}
-                  alt={profile.name}
-                  className="h-full w-full object-cover"
-                />
-                {profile.online && (
-                  <span className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-background bg-emerald-400" />
-                )}
-              </div>
+              <ProfileAvatar profile={profile} className="h-14 w-14 shrink-0 overflow-hidden rounded-full ring-2 ring-primary/20" />
               <div className="min-w-0 flex-1">
                 <div className="mb-0.5 flex items-center justify-between gap-2">
                   <div className="flex min-w-0 items-center gap-1">
@@ -200,6 +190,49 @@ function MatchesList({
   );
 }
 
+function ProfileAvatar({ profile, className }: { profile: any; className?: string }) {
+  const [idx, setIdx] = useState(0);
+  const touchStartRef = useRef<number | null>(null);
+  const touchEndRef = useRef<number | null>(null);
+
+  const prev = () => setIdx((p) => (profile.photos?.length ? (p - 1 + profile.photos.length) % profile.photos.length : 0));
+  const next = () => setIdx((p) => (profile.photos?.length ? (p + 1) % profile.photos.length : 0));
+
+  return (
+    <div className={className}>
+      <div
+        className="relative h-full w-full"
+        onTouchStart={(e) => (touchStartRef.current = e.touches[0].clientX)}
+        onTouchMove={(e) => (touchEndRef.current = e.touches[0].clientX)}
+        onTouchEnd={() => {
+          if (touchStartRef.current == null || touchEndRef.current == null) return;
+          const d = touchEndRef.current - touchStartRef.current;
+          if (d > 40) prev();
+          else if (d < -40) next();
+          touchStartRef.current = null;
+          touchEndRef.current = null;
+        }}
+      >
+        {profile.photos.map((p: any, i: number) => (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={p.id}
+            src={p.url}
+            alt={profile.name}
+            className={cn(
+              "absolute inset-0 h-full w-full object-cover transition-opacity duration-200",
+              i === idx ? "opacity-100" : "opacity-0"
+            )}
+          />
+        ))}
+        {profile.online && (
+          <span className="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-background bg-emerald-400" />
+        )}
+      </div>
+    </div>
+  );
+}
+
 function LikedYouList({
   profiles,
   onOpen,
@@ -230,12 +263,7 @@ function LikedYouList({
           onClick={() => onOpen(profile.id)}
           className="group relative aspect-[3/4] overflow-hidden rounded-2xl"
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={profile.photos[0].url}
-            alt={profile.name}
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
+          <ProfileCover profile={profile} className="absolute inset-0 h-full w-full transition-transform duration-500 group-hover:scale-105" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
           <div className="absolute left-0 right-0 top-0 flex items-start justify-between p-2.5">
             <span className="rounded-full bg-black/40 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur">
@@ -255,6 +283,44 @@ function LikedYouList({
             </div>
           </div>
         </button>
+      ))}
+    </div>
+  );
+}
+
+function ProfileCover({ profile, className }: { profile: any; className?: string }) {
+  const [idx, setIdx] = useState(0);
+  const touchStartRef = useRef<number | null>(null);
+  const touchEndRef = useRef<number | null>(null);
+
+  const prev = () => setIdx((p) => (profile.photos?.length ? (p - 1 + profile.photos.length) % profile.photos.length : 0));
+  const next = () => setIdx((p) => (profile.photos?.length ? (p + 1) % profile.photos.length : 0));
+
+  return (
+    <div
+      className={className}
+      onTouchStart={(e) => (touchStartRef.current = e.touches[0].clientX)}
+      onTouchMove={(e) => (touchEndRef.current = e.touches[0].clientX)}
+      onTouchEnd={() => {
+        if (touchStartRef.current == null || touchEndRef.current == null) return;
+        const d = touchEndRef.current - touchStartRef.current;
+        if (d > 40) prev();
+        else if (d < -40) next();
+        touchStartRef.current = null;
+        touchEndRef.current = null;
+      }}
+    >
+      {profile.photos.map((p: any, i: number) => (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          key={p.id}
+          src={p.url}
+          alt={profile.name}
+          className={cn(
+            "absolute inset-0 h-full w-full object-cover transition-opacity duration-200",
+            i === idx ? "opacity-100" : "opacity-0"
+          )}
+        />
       ))}
     </div>
   );
