@@ -149,21 +149,21 @@ export function EditProfileModal({ open, onOpenChange }: EditProfileModalProps) 
               )}
 
             {/* Photo indicators */}
-            <div className="absolute inset-x-0 top-0 z-10 flex gap-2 p-3">
+            <div className="absolute inset-x-0 top-0 z-10 flex gap-2 p-3 justify-center">
               {photos.length > 0 ? (
                 photos.map((p, i) => (
                   <button
                     key={i}
                     onClick={() => setPhotoIndex(i)}
                     className={cn(
-                      "h-1 w-8 rounded-full transition-all",
-                      i === photoIndex ? "bg-white w-12" : "bg-white/40"
+                      "h-1.5 w-8 rounded-full transition-all",
+                      i === photoIndex ? "bg-white" : "bg-white/40"
                     )}
                     aria-label={`Photo ${i + 1}`}
                   />
                 ))
               ) : (
-                <div className="h-1 flex-1 rounded-full bg-white" />
+                <div className="h-1.5 w-24 mx-auto rounded-full bg-white" />
               )}
             </div>
 
