@@ -62,7 +62,7 @@ export function DiscoverScreen() {
         )}
       </div>
 
-      <div className="flex items-center justify-center gap-4 px-6 pb-4">
+      <div className="absolute inset-x-0 bottom-6 z-20 flex items-center justify-center gap-3 px-6">
         <ActionButton
           onClick={() => handleAction("pass")}
           variant="ghost"
