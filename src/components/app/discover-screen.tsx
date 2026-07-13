@@ -1,7 +1,7 @@
 "use client";
 
 import { Filter, RotateCcw, Sparkles, X, Heart, Star } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { useApp } from "./app-store";
 import { SwipeCard } from "./swipe-card";
@@ -10,8 +10,11 @@ import { hapticImpact } from "@/lib/telegram";
 export function DiscoverScreen() {
   const { deck, swipe, rewind, setFiltersOpen, swipes } = useApp();
   const [lastSwipedId, setLastSwipedId] = useState<string | null>(null);
+  const [navOffset, setNavOffset] = useState(0);
 
-  const visible = useMemo(() => deck.slice(0, 3), [deck]);
+  useEffect(() => setNavOffset(0), [deck.length]);
+
+  const visible = useMemo(() => deck.slice(navOffset, navOffset + 3), [deck, navOffset]);
   const canRewind = Object.keys(swipes).length > 0 && lastSwipedId !== null;
 
   const handleSwipe = (profileId: string, direction: "like" | "pass" | "super") => {
@@ -28,6 +31,14 @@ export function DiscoverScreen() {
     handleSwipe(top.id, direction);
   };
 
+  const goNextProfile = () => {
+    if (navOffset + 1 <= Math.max(0, deck.length - 1)) setNavOffset((s) => s + 1);
+  };
+
+  const goPrevProfile = () => {
+    if (navOffset - 1 >= 0) setNavOffset((s) => s - 1);
+  };
+
   return (
     <div className="flex h-full flex-col">
       <header className="px-5 py-2">
@@ -40,7 +51,7 @@ export function DiscoverScreen() {
         </div>
       </header>
 
-      <div className="relative flex-1 px-4 py-2">
+      <div className="relative flex-1 px-4 py-0">
         {deck.length === 0 ? (
           <EmptyDeck />
         ) : (
@@ -57,6 +68,8 @@ export function DiscoverScreen() {
                     stackIndex={stackIndex}
                     onLike={(id) => handleSwipe(id, "like")}
                     onSuper={(id) => handleSwipe(id, "super")}
+                    onNextProfile={goNextProfile}
+                    onPrevProfile={goPrevProfile}
                   />
                 );
               })}
@@ -64,28 +77,7 @@ export function DiscoverScreen() {
         )}
       </div>
 
-      <div className="absolute inset-x-0 bottom-24 z-20 flex items-center justify-center gap-3 px-6">
-        <ActionButton
-          onClick={() => handleAction("pass")}
-          variant="ghost"
-          ariaLabel="Пропустить"
-          disabled={deck.length === 0}
-        >
-          <X className="h-6 w-6" />
-        </ActionButton>
-        <ActionButton
-          onClick={() => {
-            rewind();
-            hapticImpact("light");
-          }}
-          variant="star"
-          ariaLabel="Отменить действие"
-          disabled={!canRewind}
-        >
-          <RotateCcw className="h-5 w-5" />
-        </ActionButton>
-        {/* like/super moved to card (vertical on photo) */}
-      </div>
+      {/* bottom action buttons removed per request */}
     </div>
   );
 }
