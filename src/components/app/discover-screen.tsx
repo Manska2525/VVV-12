@@ -30,7 +30,7 @@ export function DiscoverScreen() {
 
   return (
     <div className="flex h-full flex-col">
-      <header className="px-5 py-2">
+      <header className="px-5 pt-6 pb-0">
         <div className="w-full text-center">
           <p className="text-xs text-muted-foreground">
             {deck.length > 0
@@ -40,7 +40,7 @@ export function DiscoverScreen() {
         </div>
       </header>
 
-      <div className="relative flex-1 px-4 py-2">
+      <div className="relative flex-1 px-4 pb-4 pt-0">
         {deck.length === 0 ? (
           <EmptyDeck />
         ) : (
