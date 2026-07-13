@@ -1,6 +1,6 @@
 "use client";
 
-import { Compass, Heart, User2 } from "lucide-react";
+import { Compass, Heart, User2, SlidersHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { AppStoreProvider, useApp, type Screen } from "./app-store";
@@ -27,6 +27,7 @@ function NavBar({
   onChange: (s: Screen) => void;
 }) {
   const { totalUnread } = useApp();
+  const { setFiltersOpen } = useApp();
 
   return (
     <nav
@@ -34,41 +35,88 @@ function NavBar({
       role="tablist"
     >
       <div className="mx-auto flex max-w-md items-stretch justify-around px-2 pb-1 pt-1.5">
-        {NAV_ITEMS.map(({ id, label, icon: Icon }) => {
-          const isActive = active === id;
-          return (
-            <button
-              key={id}
-              type="button"
-              role="tab"
-              aria-selected={isActive}
-              onClick={() => onChange(id)}
-              className={cn(
-                "relative flex flex-1 flex-col items-center justify-center gap-0.5 rounded-2xl px-3 py-2 text-xs font-medium transition-colors",
-                isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              <span className="relative">
-                <Icon
-                  className={cn(
-                    "h-[22px] w-[22px] transition-transform",
-                    isActive && "scale-110"
-                  )}
-                  strokeWidth={isActive ? 2.4 : 1.8}
-                />
-                {id === "matches" && totalUnread > 0 && (
-                  <span className="absolute -right-1.5 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold leading-none text-primary-foreground">
-                    {totalUnread > 99 ? "99+" : totalUnread}
-                  </span>
-                )}
+        {/* Лента */}
+        <button
+          type="button"
+          role="tab"
+          aria-selected={active === "discover"}
+          onClick={() => onChange("discover")}
+          className={cn(
+            "relative flex flex-1 flex-col items-center justify-center gap-0.5 rounded-2xl px-3 py-2 text-xs font-medium transition-colors",
+            active === "discover" ? "text-primary" : "text-muted-foreground hover:text-foreground"
+          )}
+        >
+          <span className="relative">
+            <Compass
+              className={cn("h-[22px] w-[22px] transition-transform", active === "discover" && "scale-110")}
+              strokeWidth={active === "discover" ? 2.4 : 1.8}
+            />
+          </span>
+          <span>Лента</span>
+          {active === "discover" && (
+            <span className="absolute -top-px left-1/2 h-[3px] w-8 -translate-x-1/2 rounded-full bg-primary" />
+          )}
+        </button>
+
+        {/* Кнопка фильтров между Лента и Матчи */}
+        <button
+          type="button"
+          aria-label="Фильтры"
+          onClick={() => setFiltersOpen(true)}
+          className="relative flex flex-col items-center justify-center gap-0.5 rounded-2xl px-3 py-2 text-xs font-medium text-muted-foreground hover:text-foreground"
+        >
+          <SlidersHorizontal className="h-[22px] w-[22px]" />
+          <span>Фильтры</span>
+        </button>
+
+        {/* Матчи */}
+        <button
+          type="button"
+          role="tab"
+          aria-selected={active === "matches"}
+          onClick={() => onChange("matches")}
+          className={cn(
+            "relative flex flex-1 flex-col items-center justify-center gap-0.5 rounded-2xl px-3 py-2 text-xs font-medium transition-colors",
+            active === "matches" ? "text-primary" : "text-muted-foreground hover:text-foreground"
+          )}
+        >
+          <span className="relative">
+            <Heart
+              className={cn("h-[22px] w-[22px] transition-transform", active === "matches" && "scale-110")}
+              strokeWidth={active === "matches" ? 2.4 : 1.8}
+            />
+            {totalUnread > 0 && (
+              <span className="absolute -right-1.5 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold leading-none text-primary-foreground">
+                {totalUnread > 99 ? "99+" : totalUnread}
               </span>
-              <span>{label}</span>
-              {isActive && (
-                <span className="absolute -top-px left-1/2 h-[3px] w-8 -translate-x-1/2 rounded-full bg-primary" />
-              )}
-            </button>
-          );
-        })}
+            )}
+          </span>
+          <span>Матчи</span>
+          {active === "matches" && (
+            <span className="absolute -top-px left-1/2 h-[3px] w-8 -translate-x-1/2 rounded-full bg-primary" />
+          )}
+        </button>
+
+        {/* Профиль */}
+        <button
+          type="button"
+          role="tab"
+          aria-selected={active === "profile"}
+          onClick={() => onChange("profile")}
+          className={cn(
+            "relative flex flex-1 flex-col items-center justify-center gap-0.5 rounded-2xl px-3 py-2 text-xs font-medium transition-colors",
+            active === "profile" ? "text-primary" : "text-muted-foreground hover:text-foreground"
+          )}
+        >
+          <User2
+            className={cn("h-[22px] w-[22px] transition-transform", active === "profile" && "scale-110")}
+            strokeWidth={active === "profile" ? 2.4 : 1.8}
+          />
+          <span>Профиль</span>
+          {active === "profile" && (
+            <span className="absolute -top-px left-1/2 h-[3px] w-8 -translate-x-1/2 rounded-full bg-primary" />
+          )}
+        </button>
       </div>
     </nav>
   );

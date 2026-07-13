@@ -1,6 +1,6 @@
 "use client";
 
-import { Filter, RotateCcw, SlidersHorizontal, Sparkles, X, Heart, Star } from "lucide-react";
+import { Filter, RotateCcw, Sparkles, X, Heart, Star } from "lucide-react";
 import { useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useApp } from "./app-store";
@@ -39,16 +39,7 @@ export function DiscoverScreen() {
               : "Новых профилей пока нет"}
           </p>
         </div>
-        <div className="flex items-center gap-1">
-          <button
-            type="button"
-            onClick={() => setFiltersOpen(true)}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-foreground transition-colors hover:bg-secondary/70"
-            aria-label="Фильтры"
-          >
-            <SlidersHorizontal className="h-4.5 w-4.5" />
-          </button>
-        </div>
+        <div className="flex items-center gap-1" />
       </header>
 
       <div className="relative flex-1 px-4 pb-4 pt-2">
