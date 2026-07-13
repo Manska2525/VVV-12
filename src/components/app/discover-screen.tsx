@@ -30,19 +30,17 @@ export function DiscoverScreen() {
 
   return (
     <div className="flex h-full flex-col">
-      <header className="flex items-center justify-between px-5 pb-2 pt-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight">Spark</h1>
+      <header className="px-5 pb-0 pt-0">
+        <div className="w-full text-center">
           <p className="text-xs text-muted-foreground">
             {deck.length > 0
               ? `${deck.length} ${pluralize(deck.length, ["профиль", "профиля", "профилей"])} рядом`
               : "Новых профилей пока нет"}
           </p>
         </div>
-        <div className="flex items-center gap-1" />
       </header>
 
-      <div className="relative flex-1 px-4 pb-4 pt-2">
+      <div className="relative flex-1 px-4 pb-4 pt-0">
         {deck.length === 0 ? (
           <EmptyDeck />
         ) : (
