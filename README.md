@@ -1,6 +1,6 @@
 # Spark — знакомства в Telegram
 
-[Spark — знакомства в Telegram](https://spark-tma.onrender.com/)
+[Spark — знакомства в Telegram](https://vvv-10.onrender.com/)
 
 # README
 
