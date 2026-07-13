@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { BadgeCheck, MapPin, Upload, Image as ImageIcon } from "lucide-react";
+import { BadgeCheck, MapPin, Upload, Image as ImageIcon, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTelegram } from "./telegram-provider";
 
@@ -41,8 +41,13 @@ export function EditProfileModal({ open, onOpenChange }: EditProfileModalProps) 
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []).slice(0, 3);
-    if (files.length === 0) return;
+    const maxLeft = 3 - photos.length;
+    const files = Array.from(e.target.files || []).slice(0, maxLeft || 0);
+    if (files.length === 0) {
+      // clear input so same file can be re-selected later
+      e.currentTarget.value = "";
+      return;
+    }
     const readers = files.map((file) => {
       return new Promise<string>((res) => {
         const reader = new FileReader();
@@ -51,10 +56,22 @@ export function EditProfileModal({ open, onOpenChange }: EditProfileModalProps) 
       });
     });
     Promise.all(readers).then((results) => {
-      setPhotos(results);
+      setPhotos((prev) => {
+        const next = [...prev, ...results].slice(0, 3);
+        return next;
+      });
       setPhotoIndex(0);
+      e.currentTarget.value = "";
       console.log("Фото загружены:", files.map((f) => f.name));
     });
+  };
+
+  const handleDeletePhoto = (index: number) => {
+    setPhotos((prev) => {
+      const next = prev.filter((_, i) => i !== index);
+      return next;
+    });
+    setPhotoIndex((prev) => Math.max(0, prev - 1));
   };
 
   const handleSave = () => {
@@ -140,7 +157,7 @@ export function EditProfileModal({ open, onOpenChange }: EditProfileModalProps) 
             className="mt-3 w-full rounded-xl bg-primary hover:bg-primary/90"
           >
             <Upload className="mr-2 h-4 w-4" />
-            Добавить, изменить фото
+            {photos.length > 0 ? "Добавить фото" : "Добавить, изменить фото"}
           </Button>
           <input
             ref={fileInputRef}
@@ -150,6 +167,33 @@ export function EditProfileModal({ open, onOpenChange }: EditProfileModalProps) 
             onChange={handleFileChange}
             className="hidden"
           />
+
+          {/* Thumbnails + delete */}
+          {photos.length > 0 && (
+            <div className="mt-3 flex gap-3">
+              {photos.map((p, i) => (
+                <div key={i} className="relative">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={p}
+                    alt={`thumb-${i}`}
+                    onClick={() => setPhotoIndex(i)}
+                    className={cn(
+                      "h-16 w-24 rounded-lg object-cover cursor-pointer",
+                      i === photoIndex ? "ring-2 ring-white" : ""
+                    )}
+                  />
+                  <button
+                    onClick={() => handleDeletePhoto(i)}
+                    className="absolute -top-2 -right-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white"
+                    aria-label={`Удалить фото ${i + 1}`}
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="space-y-5 py-4">
