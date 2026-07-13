@@ -147,7 +147,7 @@ export function FiltersSheet() {
               onChange={(e) =>
                 setDraft((d) => ({ ...d, maxDistanceKm: Number(e.target.value) }))
               }
-              className="h-1.5 w-full appearance-none rounded-full bg-secondary accent-primary"
+              className="h-1.5 w-full appearance-none rounded-full bg-secondary accent-primary [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:shadow-md"
             />
           </section>
 
