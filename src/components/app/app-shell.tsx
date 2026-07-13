@@ -114,10 +114,17 @@ function ShellInner() {
     ];
 
     const removeChips = () => {
-      const els = Array.from(document.querySelectorAll('button,span')) as HTMLElement[];
+      const els = Array.from(document.querySelectorAll('button,span,div')) as HTMLElement[];
       els.forEach((el) => {
         const t = (el.textContent || '').trim();
-        if (INTEREST_KEYS.includes(t)) el.remove();
+        if (!t) return;
+        if (t.length > 40) return; // avoid removing large blocks
+        for (const key of INTEREST_KEYS) {
+          if (t.includes(key)) {
+            el.remove();
+            break;
+          }
+        }
       });
     };
 

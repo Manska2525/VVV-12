@@ -35,14 +35,32 @@ export function SwipeCard({ profile, onSwipe, isTop, stackIndex }: SwipeCardProp
   useEffect(() => {
     const el = cardRef.current;
     if (!el) return;
-    // Find the profile info container and remove buttons that look like chips.
-    const info = el.querySelector('.absolute.inset-x-0.bottom-0');
-    if (!info) return;
-    const buttons = Array.from(info.querySelectorAll('button')) as HTMLElement[];
-    buttons.forEach((b) => {
-      const cls = b.className || '';
-      if (cls.includes('rounded-full') && cls.includes('px-3')) {
-        b.remove();
+    const info = el.querySelector('.absolute.inset-x-0.bottom-0') || el;
+    const candidates = Array.from(info.querySelectorAll('button,span,div')) as HTMLElement[];
+    const KEYS = [
+      "Путешествия",
+      "Спорт",
+      "Музыка",
+      "Кино",
+      "Книги",
+      "Готовка",
+      "Йога",
+      "Фотография",
+      "Танцы",
+      "Игры",
+      "Природа",
+      "Искусство",
+      "Технологии",
+      "Настолки",
+    ];
+    candidates.forEach((c) => {
+      const t = (c.textContent || '').trim();
+      if (!t || t.length > 40) return;
+      for (const k of KEYS) {
+        if (t.includes(k)) {
+          c.remove();
+          break;
+        }
       }
     });
   }, [profile.id]);
